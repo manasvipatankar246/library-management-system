@@ -13,10 +13,11 @@ router.post("/", (req, res) => {
         quantity
     } = req.body;
 
-    if (!title || !author || !quantity) {
+    // Validate required fields and quantity
+    if (!title || !author || !quantity || quantity < 1) {
         return res.status(400).json({
             success: false,
-            message: "Title, author and quantity are required"
+            message: "Title, author and valid quantity are required"
         });
     }
 
