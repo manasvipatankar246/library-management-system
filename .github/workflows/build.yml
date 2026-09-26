@@ -1,0 +1,41 @@
+name: Library Management System CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check server.js
+        run: node --check server/server.js
+
+      - name: Check books.js
+        run: node --check server/books.js
+
+      - name: Check members.js
+        run: node --check server/members.js
+
+      - name: Check transactions.js
+        run: node --check server/transactions.js
+
+      - name: Check dashboard.js
+        run: node --check server/dashboard.js
