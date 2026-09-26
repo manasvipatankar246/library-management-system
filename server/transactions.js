@@ -14,6 +14,18 @@ router.post("/issue", (req, res) => {
         });
     }
 
+    // Validate due date
+    const today = new Date()
+        .toISOString()
+        .split("T")[0];
+
+    if (due_date < today) {
+        return res.status(400).json({
+            success: false,
+            message: "Due date cannot be earlier than today"
+        });
+    }
+
     db.get(
         "SELECT * FROM books WHERE id = ?",
         [book_id],
