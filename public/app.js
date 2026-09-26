@@ -91,14 +91,31 @@ function displayBooks(books) {
 
     container.innerHTML = books.map(book => `
         <div class="item">
+
             <h3>${book.title}</h3>
 
             <p><strong>ID:</strong> ${book.id}</p>
-            <p><strong>Author:</strong> ${book.author}</p>
-            <p><strong>Category:</strong> ${book.category || "N/A"}</p>
-            <p><strong>ISBN:</strong> ${book.isbn || "N/A"}</p>
-            <p><strong>Total:</strong> ${book.quantity}</p>
-            <p><strong>Available:</strong> ${book.available_quantity}</p>
+
+            <p><strong>Author:</strong>
+                ${book.author}
+            </p>
+
+            <p><strong>Category:</strong>
+                ${book.category || "N/A"}
+            </p>
+
+            <p><strong>ISBN:</strong>
+                ${book.isbn || "N/A"}
+            </p>
+
+            <p><strong>Total:</strong>
+                ${book.quantity}
+            </p>
+
+            <p><strong>Available:</strong>
+                ${book.available_quantity}
+            </p>
+
         </div>
     `).join("");
 }
@@ -130,20 +147,33 @@ document.getElementById("bookForm")
         event.preventDefault();
 
         const book = {
-            title: document.getElementById("bookTitle").value,
-            author: document.getElementById("bookAuthor").value,
-            isbn: document.getElementById("bookISBN").value,
-            category: document.getElementById("bookCategory").value,
-            quantity: Number(
-                document.getElementById("bookQuantity").value
-            )
+
+            title:
+                document.getElementById("bookTitle").value,
+
+            author:
+                document.getElementById("bookAuthor").value,
+
+            isbn:
+                document.getElementById("bookISBN").value,
+
+            category:
+                document.getElementById("bookCategory").value,
+
+            quantity:
+                Number(
+                    document.getElementById("bookQuantity").value
+                )
         };
 
         const response = await fetch(`${API}/books`, {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify(book)
         });
 
@@ -152,8 +182,11 @@ document.getElementById("bookForm")
         alert(data.message);
 
         if (data.success) {
+
             this.reset();
+
             loadBooks();
+
             loadDashboard();
         }
     });
@@ -165,8 +198,11 @@ document.getElementById("bookForm")
 
 async function loadMembers() {
 
-    const response = await fetch(`${API}/members`);
-    const data = await response.json();
+    const response =
+        await fetch(`${API}/members`);
+
+    const data =
+        await response.json();
 
     displayMembers(data.members || []);
 }
@@ -178,20 +214,38 @@ function displayMembers(members) {
         document.getElementById("membersList");
 
     if (members.length === 0) {
-        container.innerHTML = "<p>No members found.</p>";
+
+        container.innerHTML =
+            "<p>No members found.</p>";
+
         return;
     }
 
     container.innerHTML = members.map(member => `
         <div class="item">
+
             <h3>${member.name}</h3>
 
-            <p><strong>ID:</strong> ${member.id}</p>
-            <p><strong>Email:</strong> ${member.email}</p>
-            <p><strong>Phone:</strong> ${member.phone || "N/A"}</p>
-            <p><strong>Registered:</strong>
+            <p>
+                <strong>ID:</strong>
+                ${member.id}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                ${member.email}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                ${member.phone || "N/A"}
+            </p>
+
+            <p>
+                <strong>Registered:</strong>
                 ${member.registration_date}
             </p>
+
         </div>
     `).join("");
 }
@@ -203,15 +257,19 @@ async function searchMembers() {
         document.getElementById("memberSearch").value;
 
     if (!query.trim()) {
+
         loadMembers();
+
         return;
     }
 
-    const response = await fetch(
-        `${API}/members/search?q=${encodeURIComponent(query)}`
-    );
+    const response =
+        await fetch(
+            `${API}/members/search?q=${encodeURIComponent(query)}`
+        );
 
-    const data = await response.json();
+    const data =
+        await response.json();
 
     displayMembers(data.members || []);
 }
@@ -223,26 +281,40 @@ document.getElementById("memberForm")
         event.preventDefault();
 
         const member = {
-            name: document.getElementById("memberName").value,
-            email: document.getElementById("memberEmail").value,
-            phone: document.getElementById("memberPhone").value
+
+            name:
+                document.getElementById("memberName").value,
+
+            email:
+                document.getElementById("memberEmail").value,
+
+            phone:
+                document.getElementById("memberPhone").value
         };
 
-        const response = await fetch(`${API}/members`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(member)
-        });
+        const response =
+            await fetch(`${API}/members`, {
 
-        const data = await response.json();
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(member)
+            });
+
+        const data =
+            await response.json();
 
         alert(data.message);
 
         if (data.success) {
+
             this.reset();
+
             loadMembers();
+
             loadDashboard();
         }
     });
@@ -258,35 +330,47 @@ document.getElementById("issueForm")
         event.preventDefault();
 
         const transaction = {
-            book_id: Number(
-                document.getElementById("issueBookId").value
-            ),
-            member_id: Number(
-                document.getElementById("issueMemberId").value
-            ),
+
+            book_id:
+                Number(
+                    document.getElementById("issueBookId").value
+                ),
+
+            member_id:
+                Number(
+                    document.getElementById("issueMemberId").value
+                ),
+
             due_date:
                 document.getElementById("dueDate").value
         };
 
-        const response = await fetch(
-            `${API}/transactions/issue`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(transaction)
-            }
-        );
+        const response =
+            await fetch(
+                `${API}/transactions/issue`,
+                {
+                    method: "POST",
 
-        const data = await response.json();
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(transaction)
+                }
+            );
+
+        const data =
+            await response.json();
 
         document.getElementById("issueMessage").innerHTML =
             `<p>${data.message}</p>`;
 
         if (data.success) {
+
             this.reset();
+
             loadIssuedBooks();
+
             loadDashboard();
         }
     });
@@ -301,7 +385,8 @@ async function loadIssuedBooks() {
     const response =
         await fetch(`${API}/transactions/issued`);
 
-    const data = await response.json();
+    const data =
+        await response.json();
 
     const container =
         document.getElementById("issuedList");
@@ -347,42 +432,102 @@ async function loadIssuedBooks() {
 
 async function returnBook(transactionId) {
 
-    const response = await fetch(
-        `${API}/transactions/return/${transactionId}`,
-        {
-            method: "POST"
-        }
-    );
+    const response =
+        await fetch(
+            `${API}/transactions/return/${transactionId}`,
+            {
+                method: "POST"
+            }
+        );
 
-    const data = await response.json();
+    const data =
+        await response.json();
 
     alert(
         `${data.message}\nFine: ₹${data.fine || 0}`
     );
 
     if (data.success) {
+
         loadIssuedBooks();
+
         loadDashboard();
     }
 }
 
 
 // -----------------------------
-// Transactions
+// LIB-6 Transaction History
 // -----------------------------
 
+// Load all transactions
 async function loadTransactions() {
 
     const response =
         await fetch(`${API}/transactions`);
 
-    const data = await response.json();
+    const data =
+        await response.json();
+
+    displayTransactions(
+        data.transactions || []
+    );
+}
+
+
+// Load currently issued transactions
+async function loadIssuedTransactions() {
+
+    const response =
+        await fetch(`${API}/transactions/issued`);
+
+    const data =
+        await response.json();
+
+    displayTransactions(
+        data.transactions || []
+    );
+}
+
+
+// Load returned transactions
+async function loadReturnedTransactions() {
+
+    const response =
+        await fetch(`${API}/transactions/returned`);
+
+    const data =
+        await response.json();
+
+    displayTransactions(
+        data.transactions || []
+    );
+}
+
+
+// Load overdue transactions
+async function loadOverdueTransactions() {
+
+    const response =
+        await fetch(`${API}/transactions/overdue`);
+
+    const data =
+        await response.json();
+
+    displayTransactions(
+        data.overdue || []
+    );
+}
+
+
+// Display transaction information
+function displayTransactions(transactions) {
 
     const container =
         document.getElementById("transactionsList");
 
-    if (!data.transactions ||
-        data.transactions.length === 0) {
+    if (!transactions ||
+        transactions.length === 0) {
 
         container.innerHTML =
             "<p>No transactions found.</p>";
@@ -404,16 +549,41 @@ async function loadTransactions() {
                 <th>Status</th>
             </tr>
 
-            ${data.transactions.map(transaction => `
+            ${transactions.map(transaction => `
                 <tr>
-                    <td>${transaction.id}</td>
-                    <td>${transaction.book_title}</td>
-                    <td>${transaction.member_name}</td>
-                    <td>${transaction.issue_date}</td>
-                    <td>${transaction.due_date}</td>
-                    <td>${transaction.return_date || "-"}</td>
-                    <td>₹${transaction.fine}</td>
-                    <td>${transaction.status}</td>
+
+                    <td>
+                        ${transaction.id}
+                    </td>
+
+                    <td>
+                        ${transaction.book_title}
+                    </td>
+
+                    <td>
+                        ${transaction.member_name}
+                    </td>
+
+                    <td>
+                        ${transaction.issue_date}
+                    </td>
+
+                    <td>
+                        ${transaction.due_date}
+                    </td>
+
+                    <td>
+                        ${transaction.return_date || "-"}
+                    </td>
+
+                    <td>
+                        ₹${transaction.fine || 0}
+                    </td>
+
+                    <td>
+                        ${transaction.status || "Overdue"}
+                    </td>
+
                 </tr>
             `).join("")}
 
