@@ -1,0 +1,10 @@
+---
+- name: Deploy Library Management System
+  hosts: webservers
+  become: yes
+  vars:
+    app_name: "Library Management System"
+    app_port: 3000
+
+  roles:
+    - libraryapp
