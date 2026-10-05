@@ -1,0 +1,10 @@
+---
+- name: Restart Library Management System
+  shell: |
+    if [ -f /opt/libraryapp/app.pid ]; then
+      kill "$(cat /opt/libraryapp/app.pid)" 2>/dev/null || true
+    fi
+    nohup node server/server.js > /opt/libraryapp/output.log 2>&1 &
+    echo $! > /opt/libraryapp/app.pid
+  args:
+    chdir: /opt/libraryapp

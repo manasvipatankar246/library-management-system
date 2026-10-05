@@ -1,0 +1,53 @@
+---
+- name: Install Node.js and npm
+  apt:
+    name:
+      - nodejs
+      - npm
+    state: present
+    update_cache: yes
+
+- name: Create application directory
+  file:
+    path: /opt/libraryapp
+    state: directory
+    mode: '0755'
+
+- name: Copy Library Management System files
+  copy:
+    src: app/
+    dest: /opt/libraryapp/
+    mode: preserve
+  notify: Restart Library Management System
+
+- name: Install application dependencies
+  command: npm install
+  args:
+    chdir: /opt/libraryapp
+    creates: /opt/libraryapp/node_modules
+
+- name: Deploy Jinja configuration
+  template:
+    src: app-config.json.j2
+    dest: /opt/libraryapp/app-config.json
+    mode: '0644'
+  notify: Restart Library Management System
+
+- name: Check whether Library application is running
+  shell: |
+    if [ -f /opt/libraryapp/app.pid ] && kill -0 "$(cat /opt/libraryapp/app.pid)" 2>/dev/null; then
+      exit 0
+    else
+      exit 1
+    fi
+  register: app_running
+  failed_when: false
+  changed_when: false
+
+- name: Start Library Management System
+  shell: |
+    nohup node server/server.js > /opt/libraryapp/output.log 2>&1 &
+    echo $! > /opt/libraryapp/app.pid
+  args:
+    chdir: /opt/libraryapp
+  when: app_running.rc != 0
