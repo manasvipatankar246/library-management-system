@@ -1,3 +1,7 @@
 node_modules/ 
 *.db 
 .env 
+mlflow/mlruns/
+mlflow/mlflow.db
+mlflow/model/
+mlflow/venv/
